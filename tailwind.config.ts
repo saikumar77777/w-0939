@@ -20,8 +20,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Poppins', 'sans-serif'],
+				sans: ['Inter', 'sans-serif'],
 				heading: ['Montserrat', 'sans-serif'],
+				display: ['SF Pro Display', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -67,27 +68,26 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// New community color palette
 				civic: {
 					blue: '#3B82F6', // Primary Blue
 					'blue-hover': '#2563EB', // Darker blue for hover states
-					'blue-dark': '#2563EB', // Deep Blue for dark mode
+					'blue-dark': '#60A5FA', // Light Blue for dark mode
 					green: '#10B981', // Action Green
 					'green-dark': '#34D399', // Light Green for dark mode
 					orange: '#F59E0B', // Alert Orange
 					'orange-dark': '#FBBF24', // Yellow for dark mode
 					purple: '#8B5CF6', // Progress Purple
 					'purple-dark': '#A78BFA', // Light Purple for dark mode
-					light: '#F9FAFB', // Background Light
-					dark: '#111827', // Background Dark
+					light: '#F8FAFC', // Background Light
+					dark: '#0F172A', // Background Dark
 					'card-light': '#FFFFFF', // Card Surface
-					'card-dark': '#1F2937', // Card Surface Dark
-					'text-primary': '#111827', // Text Primary
-					'text-secondary': '#6B7280', // Text Secondary
-					'text-primary-dark': '#F9FAFB', // Text Primary Dark
-					'text-secondary-dark': '#D1D5DB', // Text Secondary Dark
-					'border-light': '#E5E7EB', // Border Light
-					'border-dark': '#374151', // Border Dark
+					'card-dark': '#1E293B', // Card Surface Dark
+					'text-primary': '#1E293B', // Text Primary
+					'text-secondary': '#64748B', // Text Secondary
+					'text-primary-dark': '#F1F5F9', // Text Primary Dark
+					'text-secondary-dark': '#94A3B8', // Text Secondary Dark
+					'border-light': '#E2E8F0', // Border Light
+					'border-dark': '#334155', // Border Dark
 				},
 				status: {
 					pending: '#F59E0B', // Orange for pending issues
@@ -104,6 +104,15 @@ export default {
 				sm: 'calc(var(--radius) - 4px)',
 				xl: '1rem',
 				'2xl': '1.5rem',
+			},
+			boxShadow: {
+				'card': '0 4px 20px rgba(0, 0, 0, 0.05)',
+				'card-hover': '0 10px 30px rgba(0, 0, 0, 0.12)',
+				'dropdown': '0 10px 25px -3px rgba(0, 0, 0, 0.1)',
+				'glow': '0 0 20px rgba(59, 130, 246, 0.5)',
+				'3d': '0 10px 30px -15px rgba(0, 0, 0, 0.25)',
+				'inner-glow': 'inset 0 0 15px rgba(59, 130, 246, 0.2)',
+				'cutout': '0 0 0 2px rgba(255, 255, 255, 1), 0 10px 25px -3px rgba(0, 0, 0, 0.2)',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -186,6 +195,22 @@ export default {
 					'0%': { filter: 'blur(5px)', opacity: '0' },
 					'100%': { filter: 'blur(0)', opacity: '1' },
 				},
+				'confetti-fall': {
+					'0%': { transform: 'translateY(-10px) rotate(0deg)', opacity: '1' },
+					'100%': { transform: 'translateY(100vh) rotate(720deg)', opacity: '0' },
+				},
+				'ripple': {
+					'0%': { transform: 'scale(0)', opacity: '1' },
+					'100%': { transform: 'scale(4)', opacity: '0' },
+				},
+				'grain': {
+					'0%, 100%': { transform: 'translate(0, 0)' },
+					'10%': { transform: 'translate(-5%, -10%)' },
+					'30%': { transform: 'translate(3%, -15%)' },
+					'50%': { transform: 'translate(12%, 9%)' },
+					'70%': { transform: 'translate(9%, 4%)' },
+					'90%': { transform: 'translate(-1%, 7%)' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -206,13 +231,10 @@ export default {
 				'reveal-down': 'reveal-down 0.5s ease-out forwards',
 				'reveal-scale': 'reveal-scale 0.5s ease-out forwards',
 				'blur-in': 'blur-in 0.5s ease-out forwards',
+				'confetti-fall': 'confetti-fall 3s ease-in-out forwards',
+				'ripple': 'ripple 0.6s linear',
+				'grain': 'grain 8s steps(10) infinite',
 			},
-			boxShadow: {
-				'card': '0 4px 20px rgba(0, 0, 0, 0.05)',
-				'card-hover': '0 10px 30px rgba(0, 0, 0, 0.12)',
-				'dropdown': '0 10px 25px -3px rgba(0, 0, 0, 0.1)',
-				'glow': '0 0 20px rgba(59, 130, 246, 0.5)',
-			}
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

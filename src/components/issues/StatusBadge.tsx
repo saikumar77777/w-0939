@@ -64,10 +64,18 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
   const getStatusIcon = () => {
     if (status === "pending") {
       return (
-        <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <motion.svg 
+          className="w-3 h-3 mr-1" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          initial={animate ? { opacity: 0.6 } : {}}
+          animate={animate ? { opacity: [0.6, 1, 0.6] } : {}}
+          transition={{ repeat: Infinity, duration: 1.5 }}
+        >
           <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
           <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
+        </motion.svg>
       );
     }
     
@@ -94,9 +102,6 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
       >
         <motion.path
           d="M20 6L9 17L4 12"
@@ -118,10 +123,36 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: 1.05, boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}
+      layout
     >
       {getStatusIcon()}
       {getStatusLabel()}
+      
+      {/* Add subtle glow effect based on status */}
+      {status === 'pending' && animate && (
+        <motion.div 
+          className="absolute inset-0 rounded-full bg-amber-500/5"
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+      )}
+      
+      {status === 'in-progress' && animate && (
+        <motion.div 
+          className="absolute inset-0 rounded-full bg-indigo-500/5"
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        />
+      )}
+      
+      {status === 'resolved' && animate && (
+        <motion.div 
+          className="absolute inset-0 rounded-full bg-emerald-500/5"
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.2, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+      )}
     </motion.span>
   );
 };

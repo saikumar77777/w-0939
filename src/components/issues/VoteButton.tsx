@@ -90,7 +90,11 @@ const VoteButton = ({
       confetti.style.opacity = `${Math.random() * 0.5 + 0.5}`;
       document.body.appendChild(confetti);
       
-      setTimeout(() => document.body.removeChild(confetti), 5000);
+      setTimeout(() => {
+        if (document.body.contains(confetti)) {
+          document.body.removeChild(confetti);
+        }
+      }, 5000);
     }
   };
 
@@ -98,12 +102,15 @@ const VoteButton = ({
     <TooltipProvider>
       <Tooltip delayDuration={200}>
         <TooltipTrigger asChild>
-          <motion.div whileTap={{ scale: 0.95 }}>
+          <motion.div 
+            whileTap={{ scale: 0.95 }} 
+            className="relative"
+          >
             <Button 
               variant={isVoted ? "secondary" : "outline"}
               size={size === "sm" ? "sm" : "default"}
               className={cn(
-                "group transition-all duration-300 relative overflow-hidden",
+                "group transition-all duration-300 relative overflow-hidden ripple",
                 isVoted ? 
                   "border-emerald-500 text-emerald-600 bg-emerald-500/10 dark:border-emerald-400 dark:text-emerald-400 dark:bg-emerald-400/10" : 
                   "border-primary/80 text-primary hover:border-primary hover:text-primary dark:border-primary/80 dark:hover:text-primary",
@@ -118,44 +125,65 @@ const VoteButton = ({
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                  className="bg-emerald-500/10 dark:bg-emerald-400/10 rounded-full p-1"
                 >
-                  <Check className="w-4 h-4 mr-1 text-emerald-500 dark:text-emerald-400" />
+                  <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                 </motion.div>
               ) : (
                 <motion.div
                   whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
                   transition={{ duration: 0.6 }}
+                  className="bg-primary/10 dark:bg-primary/20 rounded-full p-1"
                 >
                   <ThumbsUp className={cn(
-                    "w-4 h-4 mr-1",
+                    "w-4 h-4",
                     "group-hover:text-primary dark:group-hover:text-primary transition-all duration-300"
                   )} />
                 </motion.div>
               )}
-              <span>{isVoted ? "Voted" : "Upvote"}</span>
+              <span className="ml-1.5">{isVoted ? "Voted" : "Upvote"}</span>
               {showCount && (
                 <AnimatePresence mode="wait">
-                  <motion.span 
+                  <motion.div 
                     key={votes}
-                    className="ml-1"
+                    className="ml-1.5 bg-background/80 dark:bg-background/20 rounded-full px-1.5 py-0.5 text-xs"
                     initial={{ y: -10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 10, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    ({votes})
-                  </motion.span>
+                    {votes}
+                  </motion.div>
                 </AnimatePresence>
               )}
+              
+              {/* Animated rings when voting */}
               {isAnimating && (
-                <motion.span 
-                  className="absolute inset-0 rounded-full"
-                  initial={{ scale: 0.7, opacity: 0.5 }}
-                  animate={{ scale: 1.5, opacity: 0 }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                  style={{ backgroundColor: 'hsl(var(--primary) / 0.2)' }}
-                />
+                <>
+                  <motion.span 
+                    className="absolute inset-0 rounded-full"
+                    initial={{ scale: 0.7, opacity: 0.5 }}
+                    animate={{ scale: 1.5, opacity: 0 }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    style={{ backgroundColor: 'hsl(var(--primary) / 0.2)' }}
+                  />
+                  <motion.span 
+                    className="absolute inset-0 rounded-full"
+                    initial={{ scale: 0.7, opacity: 0.5 }}
+                    animate={{ scale: 2, opacity: 0 }}
+                    transition={{ duration: 1.5, ease: "easeOut", delay: 0.1 }}
+                    style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }}
+                  />
+                </>
               )}
+              
+              {/* Subtle hover effect */}
+              <motion.span 
+                className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent rounded-full"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: isVoted ? 0 : 0.5 }}
+                transition={{ duration: 0.2 }}
+              />
             </Button>
           </motion.div>
         </TooltipTrigger>
