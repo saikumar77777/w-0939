@@ -1,11 +1,13 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 220 33% 98%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -14,10 +16,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 221 83% 53%;
+    --primary: 212 62% 42%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 35 92% 50%;
+    --secondary: 36 100% 50%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
@@ -29,37 +31,37 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    --border: 220 33% 91%;
+    --input: 220 33% 91%;
+    --ring: 212 62% 42%;
 
     --radius: 0.625rem;
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 212 62% 42%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-border: 220 33% 91%;
+    --sidebar-ring: 212 62% 42%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 32% 11%;
     --foreground: 210 40% 98%;
 
-    --card: 217 33% 17%;
+    --card: 223 47% 18%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 213 100% 24%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 45 93% 47%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 39 100% 64%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
@@ -74,53 +76,177 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
     
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 223 47% 18%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 226 100% 81%;
+    --sidebar-primary-foreground: 223 47% 18%;
+    --sidebar-accent: 223 47% 20%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 222 47% 25%;
+    --sidebar-ring: 212 100% 75%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+    height: 100%;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased min-h-screen;
   }
 }
 
 @layer components {
   .status-badge {
-    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium;
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-300;
   }
   
   .status-badge-pending {
-    @apply bg-status-pending/15 text-status-pending;
+    @apply bg-civic-orange/15 text-civic-orange dark:bg-civic-orange-dark/15 dark:text-civic-orange-dark;
   }
   
   .status-badge-in-progress {
-    @apply bg-status-in-progress/15 text-status-in-progress;
+    @apply bg-civic-purple/15 text-civic-purple dark:bg-civic-purple-dark/15 dark:text-civic-purple-dark;
   }
   
   .status-badge-resolved {
-    @apply bg-status-resolved/15 text-status-resolved;
+    @apply bg-civic-green/15 text-civic-green dark:bg-civic-green-dark/15 dark:text-civic-green-dark;
   }
   
   .drop-area {
-    @apply border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center;
+    @apply border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-all duration-300;
   }
   
   .drop-area-active {
-    @apply border-primary bg-primary/5;
+    @apply border-civic-blue bg-civic-blue/5 dark:border-civic-blue-dark dark:bg-civic-blue-dark/5;
   }
   
   .category-icon {
-    @apply p-2 rounded-full;
+    @apply p-2 rounded-full transition-all duration-300;
+  }
+
+  /* Card styles */
+  .civic-card {
+    @apply bg-civic-card-light dark:bg-civic-card-dark rounded-lg border border-civic-border-light dark:border-civic-border-dark shadow-card hover:shadow-card-hover transition-all duration-300;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply bg-civic-blue text-white hover:bg-civic-blue-hover dark:bg-civic-blue-dark dark:hover:bg-opacity-90 transition-all duration-300 rounded-md px-4 py-2 font-medium;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent border border-civic-blue text-civic-blue hover:bg-civic-blue/10 dark:border-civic-blue-dark dark:text-civic-blue-dark dark:hover:bg-civic-blue-dark/10 transition-all duration-300 rounded-md px-4 py-2 font-medium;
+  }
+  
+  .btn-success {
+    @apply bg-civic-green text-white hover:bg-opacity-90 dark:bg-civic-green-dark dark:hover:bg-opacity-90 transition-all duration-300 rounded-md px-4 py-2 font-medium;
+  }
+  
+  /* Animation utilities */
+  .animate-enter {
+    @apply animate-fade-in animate-duration-300;
+  }
+  
+  .animate-hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+  
+  .animate-hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+
+  /* Glassmorphism */
+  .glass-morphism {
+    @apply bg-white/80 dark:bg-civic-blue-dark/80 backdrop-blur-md border border-white/20 dark:border-civic-blue-dark/20;
+  }
+
+  /* Confetti animation for vote button */
+  .confetti {
+    @apply fixed w-2 h-2 rounded-full z-50 pointer-events-none animate-confetti;
+    animation: confetti-fall 3s ease-in-out forwards;
+  }
+
+  @keyframes confetti-fall {
+    0% {
+      transform: translateY(-10px) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  /* Vote button ping effect */
+  .vote-ping {
+    @apply absolute inset-0 rounded-full;
+    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes ping {
+    75%, 100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Shiny accent for important elements */
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shine 3s infinite linear;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(30deg);
+  }
+}
+
+/* Floating animation for hero elements */
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
   }
 }

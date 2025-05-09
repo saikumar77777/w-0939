@@ -21,6 +21,7 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: ['Inter', 'sans-serif'],
+				secondary: ['Source Sans Pro', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -66,27 +67,35 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Updated modern color palette
+				// Community Canvas Color Palette
 				civic: {
-					blue: '#2563EB', // Blue-600 for Light Theme
-					'blue-hover': '#1D4ED8', // Blue-700 for Light Theme
-					'blue-dark': '#3B82F6', // Blue-500 for Dark Theme
-					'blue-hover-dark': '#60A5FA', // Blue-400 for Dark Theme
-					amber: '#F59E0B', // Amber-500 for Light Theme
-					'amber-dark': '#FBBF24', // Amber-400 for Dark Theme
-					green: '#22C55E', // Green-500 for Light Theme
-					'green-dark': '#4ADE80', // Green-400 for Dark Theme
-					red: '#EF4444', // Red-500
-					light: '#F9FAFB', // Gray-50 for Light Theme Background
-					dark: '#111827', // Gray-900 for Dark Theme Background
+					blue: '#2A6CB0', // Primary Blue
+					'blue-hover': '#1E5694', // Darker blue for hover states
+					'blue-dark': '#1A3A61', // Deep Navy for dark mode
+					green: '#34A853', // Action Green
+					'green-dark': '#5CCC8F', // Mint Green for dark mode
+					orange: '#FF9800', // Alert Orange
+					'orange-dark': '#FFB649', // Amber for dark mode
+					purple: '#7B61FF', // Progress Purple
+					'purple-dark': '#9D8DFF', // Lavender for dark mode
+					light: '#F9F9FB', // Background Light
+					dark: '#121826', // Background Dark
+					'card-light': '#FFFFFF', // Card Surface
+					'card-dark': '#1E293B', // Card Surface Dark
+					'text-primary': '#1E293B', // Text Primary
+					'text-secondary': '#64748B', // Text Secondary
+					'text-primary-dark': '#E2E8F0', // Text Primary Dark
+					'text-secondary-dark': '#94A3B8', // Text Secondary Dark
+					'border-light': '#E2E8F0', // Border Light
+					'border-dark': '#2D3748', // Border Dark
 				},
 				status: {
-					pending: '#FACC15', // Yellow-400 for Light Mode
-					'pending-dark': '#FCD34D', // Yellow-300 for Dark Mode
-					"in-progress": '#38BDF8', // Sky-400 for Light Mode
-					'in-progress-dark': '#0EA5E9', // Sky-500 for Dark Mode
-					resolved: '#22C55E', // Green-500 for Light Mode
-					'resolved-dark': '#4ADE80', // Green-400 for Dark Mode
+					pending: '#FF9800', // Orange for pending issues
+					'pending-dark': '#FFB649', // Amber for dark mode
+					"in-progress": '#7B61FF', // Purple for in-progress issues
+					'in-progress-dark': '#9D8DFF', // Lavender for dark mode
+					resolved: '#34A853', // Green for resolved issues
+					'resolved-dark': '#5CCC8F', // Mint Green for dark mode
 				}
 			},
 			borderRadius: {
@@ -132,7 +141,27 @@ export default {
 				'slide-in': {
 					from: { transform: 'translateX(-100%)' },
 					to: { transform: 'translateX(0)' }
-				}
+				},
+				'pulse': {
+					'0%, 100%': { transform: 'scale(1)' },
+					'50%': { transform: 'scale(1.05)' },
+				},
+				'vote-ping': {
+					'0%': { transform: 'scale(0.95)', opacity: '1' },
+					'75%, 100%': { transform: 'scale(1.2)', opacity: '0' },
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' },
+				},
+				'bounce-soft': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-5px)' },
+				},
+				'spin-slow': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -141,11 +170,17 @@ export default {
 				'fade-out': 'fade-out 0.3s ease-out',
 				'scale-in': 'scale-in 0.2s ease-out',
 				'scale-out': 'scale-out 0.2s ease-out',
-				'slide-in': 'slide-in 0.3s ease-out'
+				'slide-in': 'slide-in 0.3s ease-out',
+				'pulse': 'pulse 1.5s ease-in-out infinite',
+				'vote-ping': 'vote-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
+				'float': 'float 3s ease-in-out infinite',
+				'bounce-soft': 'bounce-soft 2s ease-in-out infinite',
+				'spin-slow': 'spin-slow 8s linear infinite',
 			},
 			boxShadow: {
-				'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-				'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+				'card': '0 2px 8px rgba(0, 0, 0, 0.08)',
+				'card-hover': '0 8px 16px rgba(0, 0, 0, 0.12)',
+				'dropdown': '0 10px 25px -3px rgba(0, 0, 0, 0.1)',
 			}
 		}
 	},

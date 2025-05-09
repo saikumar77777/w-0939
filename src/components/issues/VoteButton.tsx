@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ThumbsUp, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,12 +26,14 @@ const VoteButton = ({
   const [isVoted, setIsVoted] = useState(initialVoted);
   const [votes, setVotes] = useState(initialVotes);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const { toast } = useToast();
 
   const handleVote = async () => {
     if (isVoted || isLoading) return;
     
     setIsLoading(true);
+    setIsAnimating(true);
     
     try {
       if (onVote) {
@@ -43,9 +46,10 @@ const VoteButton = ({
       toast({
         title: "Vote recorded",
         description: "Thanks for supporting this issue!",
+        className: "bg-civic-green/10 text-civic-green dark:bg-civic-green-dark/10 dark:text-civic-green-dark border-civic-green/20 dark:border-civic-green-dark/20",
       });
       
-      // Simple confetti effect for milestone votes
+      // Milestone vote celebration
       if ((votes + 1) % 10 === 0) {
         showConfetti();
       }
@@ -58,20 +62,20 @@ const VoteButton = ({
       });
     } finally {
       setIsLoading(false);
+      setTimeout(() => setIsAnimating(false), 1000);
     }
   };
   
   const showConfetti = () => {
-    // This is a simple implementation, in a real app you might use a library like canvas-confetti
     const confettiCount = 50;
-    const colors = ['#1EAEDB', '#33C3F0', '#F2FCE2', '#8A898C'];
+    const colors = ['#2A6CB0', '#34A853', '#FF9800', '#7B61FF'];
     
     for (let i = 0; i < confettiCount; i++) {
       const confetti = document.createElement('div');
       confetti.className = 'confetti';
       confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       confetti.style.left = `${Math.random() * 100}%`;
-      confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+      confetti.style.animationDelay = `${Math.random() * 0.5}s`;
       confetti.style.opacity = `${Math.random() * 0.5 + 0.5}`;
       document.body.appendChild(confetti);
       
@@ -87,26 +91,40 @@ const VoteButton = ({
             variant={isVoted ? "secondary" : "outline"}
             size={size === "sm" ? "sm" : "default"}
             className={cn(
-              "group transition-all duration-200",
-              isVoted ? "border-secondary/50" : "",
+              "group transition-all duration-300 relative overflow-hidden",
+              isVoted ? "border-civic-green text-civic-green dark:border-civic-green-dark dark:text-civic-green-dark" : 
+                       "border-civic-blue hover:border-civic-blue hover:text-civic-blue dark:border-civic-blue-dark dark:hover:text-civic-blue-dark",
               isLoading ? "opacity-80 cursor-not-allowed" : ""
             )}
             onClick={handleVote}
             disabled={isVoted || isLoading}
           >
             {isVoted ? (
-              <Check className="w-4 h-4 mr-1 text-secondary" />
+              <Check className="w-4 h-4 mr-1 text-civic-green dark:text-civic-green-dark" />
             ) : (
               <ThumbsUp className={cn(
                 "w-4 h-4 mr-1",
-                "group-hover:scale-110 group-hover:text-primary transition-all duration-200"
+                "group-hover:scale-110 group-hover:rotate-12 group-hover:text-civic-blue dark:group-hover:text-civic-blue-dark transition-all duration-300"
               )} />
             )}
-            <span>{isVoted ? "Voted" : "UPVOTE"}</span>
-            {showCount && <span className="ml-1">({votes})</span>}
+            <span>{isVoted ? "Voted" : "Upvote"}</span>
+            {showCount && (
+              <span className={cn(
+                "ml-1 transition-all duration-300",
+                isAnimating && "animate-pulse text-civic-blue dark:text-civic-blue-dark"
+              )}>
+                ({votes})
+              </span>
+            )}
+            {isAnimating && (
+              <span className="absolute inset-0 bg-civic-blue/10 dark:bg-civic-blue-dark/10 animate-ping rounded-md"></span>
+            )}
           </Button>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent 
+          className="bg-card text-card-foreground animate-fade-in border border-border shadow-lg"
+          sideOffset={4}
+        >
           {isVoted 
             ? "You've already voted on this issue" 
             : "Upvote this issue to show your support"}
