@@ -2,6 +2,7 @@
 import { IssueCategory } from "@/types";
 import { MapPin, Droplet, Trash2, Zap, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 interface CategoryIconProps {
   category: IssueCategory;
@@ -19,13 +20,13 @@ const CategoryIcon = ({
   const getCategoryColor = () => {
     switch (category) {
       case "road":
-        return "text-civic-orange dark:text-civic-orange-dark";
+        return "text-amber-500 dark:text-amber-400";
       case "water":
-        return "text-civic-blue dark:text-civic-blue-dark";
+        return "text-sky-500 dark:text-sky-400";
       case "sanitation":
-        return "text-civic-green dark:text-civic-green-dark";
+        return "text-emerald-500 dark:text-emerald-400";
       case "electricity":
-        return "text-civic-purple dark:text-civic-purple-dark";
+        return "text-indigo-500 dark:text-indigo-400";
       case "other":
       default:
         return "text-gray-500 dark:text-gray-400";
@@ -37,44 +38,108 @@ const CategoryIcon = ({
     
     switch (category) {
       case "road":
-        return "bg-civic-orange/10 dark:bg-civic-orange-dark/10";
+        return "bg-amber-500/10 dark:bg-amber-400/10";
       case "water":
-        return "bg-civic-blue/10 dark:bg-civic-blue-dark/10";
+        return "bg-sky-500/10 dark:bg-sky-400/10";
       case "sanitation":
-        return "bg-civic-green/10 dark:bg-civic-green-dark/10";
+        return "bg-emerald-500/10 dark:bg-emerald-400/10";
       case "electricity":
-        return "bg-civic-purple/10 dark:bg-civic-purple-dark/10";
+        return "bg-indigo-500/10 dark:bg-indigo-400/10";
       case "other":
       default:
         return "bg-gray-100 dark:bg-gray-800";
     }
   };
 
+  const iconVariants = {
+    initial: { scale: 1 },
+    hover: { scale: 1.15, rotate: [0, -10, 10, -5, 5, 0], transition: { duration: 0.6 } },
+  };
+  
+  const iconContainerVariants = {
+    initial: { backgroundColor: 'rgba(0, 0, 0, 0.05)' },
+    hover: { 
+      backgroundColor: 'rgba(0, 0, 0, 0.08)',
+      boxShadow: '0 0 12px rgba(0, 0, 0, 0.1)',
+      transition: { duration: 0.3 } 
+    },
+  };
+
   const renderIcon = () => {
     switch (category) {
       case "road":
-        return <MapPin size={size} className={cn("transition-transform duration-300 group-hover:scale-110", getCategoryColor())} />;
+        return (
+          <motion.div
+            variants={iconVariants}
+            initial="initial"
+            whileHover="hover"
+            className="transition-transform duration-300"
+          >
+            <MapPin size={size} className={cn(getCategoryColor())} />
+          </motion.div>
+        );
       case "water":
-        return <Droplet size={size} className={cn("transition-transform duration-300 group-hover:scale-110", getCategoryColor())} />;
+        return (
+          <motion.div
+            variants={iconVariants}
+            initial="initial"
+            whileHover="hover"
+            className="transition-transform duration-300"
+          >
+            <Droplet size={size} className={cn(getCategoryColor())} />
+          </motion.div>
+        );
       case "sanitation":
-        return <Trash2 size={size} className={cn("transition-transform duration-300 group-hover:scale-110", getCategoryColor())} />;
+        return (
+          <motion.div
+            variants={iconVariants}
+            initial="initial"
+            whileHover="hover"
+            className="transition-transform duration-300"
+          >
+            <Trash2 size={size} className={cn(getCategoryColor())} />
+          </motion.div>
+        );
       case "electricity":
-        return <Zap size={size} className={cn("transition-transform duration-300 group-hover:scale-110", getCategoryColor())} />;
+        return (
+          <motion.div
+            variants={iconVariants}
+            initial="initial"
+            whileHover="hover"
+            className="transition-transform duration-300"
+          >
+            <Zap size={size} className={cn(getCategoryColor())} />
+          </motion.div>
+        );
       case "other":
       default:
-        return <HelpCircle size={size} className={cn("transition-transform duration-300 group-hover:scale-110", getCategoryColor())} />;
+        return (
+          <motion.div
+            variants={iconVariants}
+            initial="initial"
+            whileHover="hover"
+            className="transition-transform duration-300"
+          >
+            <HelpCircle size={size} className={cn(getCategoryColor())} />
+          </motion.div>
+        );
     }
   };
 
   return (
-    <div className={cn(
-      "category-icon group rounded-full p-1.5", 
-      getBgColor(), 
-      withBackground && "p-2", 
-      className
-    )}>
+    <motion.div 
+      className={cn(
+        "category-icon rounded-full p-1.5 flex items-center justify-center", 
+        getBgColor(), 
+        withBackground && "p-3", 
+        className
+      )}
+      variants={withBackground ? iconContainerVariants : {}}
+      initial="initial"
+      whileHover="hover"
+    >
       {renderIcon()}
-    </div>
+    </motion.div>
   );
 };
 

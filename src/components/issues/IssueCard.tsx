@@ -10,6 +10,7 @@ import CategoryIcon from "./CategoryIcon";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { getUserProfile } from "@/lib/supabase-data";
+import { motion } from "framer-motion";
 
 interface IssueCardProps {
   issue: Issue;
@@ -60,130 +61,183 @@ const IssueCard = ({
       setIsVoting(false);
     }
   };
+
+  const cardVariants = {
+    initial: {
+      opacity: 0,
+      y: 20,
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+    hover: {
+      y: -5,
+      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
+  };
   
   return (
-    <Card 
-      className={cn(
-        "overflow-hidden h-full flex flex-col transition-all duration-300",
-        "border border-border dark:border-border hover:shadow-card",
-        "hover:border-civic-blue/20 dark:hover:border-civic-blue-dark/20",
-        onClick && "cursor-pointer",
-        "animate-scale-in"
-      )}
-      onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <motion.div
+      variants={cardVariants}
+      initial="initial"
+      animate="animate"
+      whileHover="hover"
+      whileTap={{ scale: 0.98 }}
     >
-      <div className="p-0 flex-grow">
-        <div className="relative overflow-hidden">
-          {issue.imageUrl ? (
-            <div className="relative w-full h-36 overflow-hidden group">
-              <img 
-                src={issue.imageUrl} 
-                alt={issue.title}
-                className={cn(
-                  "w-full h-36 object-cover transition-all duration-500",
-                  isHovered && "scale-105"
-                )}
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
-          ) : (
-            <div className={cn(
-              "w-full h-36 bg-muted flex items-center justify-center transition-all duration-300",
-              isHovered && "bg-muted/80"
-            )}>
-              <CategoryIcon category={issue.category} size={40} withBackground className="animate-bounce-soft" />
-            </div>
-          )}
-          
-          <div className="absolute top-2 right-2 z-10">
-            <StatusBadge status={issue.status} size="sm" animate />
-          </div>
-          
-          {issue.imageUrl && (
-            <div className="absolute bottom-2 left-2 bg-black/50 rounded-full p-1">
-              <Image size={16} className="text-white" />
-            </div>
-          )}
-        </div>
-        
-        <div className="p-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-            <CategoryIcon category={issue.category} />
-            <span className="inline-block px-2 py-1 bg-muted dark:bg-muted text-foreground dark:text-foreground rounded-full text-xs font-medium mb-2 capitalize">
-              {issue.category}
-            </span>
-            <span className="text-xs text-muted-foreground ml-auto">{timeAgo}</span>
-          </div>
-          
-          <h3 className={cn(
-            "font-medium text-lg mb-2 line-clamp-2 transition-colors duration-300",
-            isHovered ? "text-civic-blue dark:text-civic-blue-dark" : "text-foreground"
-          )}>
-            {issue.title}
-          </h3>
-          
-          <div className="flex items-center justify-between">
-            <div className="mt-2 text-sm text-muted-foreground truncate max-w-[70%]">
-              <span className="inline-flex items-center">
-                <MapPin className="w-3 h-3 mr-1 text-civic-orange dark:text-civic-orange-dark" />
-                {issue.location}
-              </span>
-              <span className="block text-xs text-muted-foreground mt-1">By: {creatorName}</span>
+      <Card 
+        className={cn(
+          "overflow-hidden h-full flex flex-col transition-all duration-300",
+          "border border-border dark:border-border rounded-xl",
+          "backdrop-blur-sm bg-card/95 dark:bg-card/95",
+          onClick && "cursor-pointer",
+        )}
+        onClick={onClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div className="p-0 flex-grow">
+          <div className="relative overflow-hidden">
+            {issue.imageUrl ? (
+              <div className="relative w-full h-40 overflow-hidden group">
+                <motion.img 
+                  src={issue.imageUrl} 
+                  alt={issue.title}
+                  className="w-full h-40 object-cover"
+                  loading="lazy"
+                  animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                />
+                <div className={cn(
+                  "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent transition-opacity duration-300",
+                  isHovered ? "opacity-100" : "opacity-0"
+                )}></div>
+              </div>
+            ) : (
+              <div className={cn(
+                "w-full h-40 bg-muted flex items-center justify-center transition-all duration-300",
+                isHovered && "bg-muted/80"
+              )}>
+                <motion.div
+                  animate={isHovered ? { y: [0, -10, 0] } : {}}
+                  transition={{ duration: 1, repeat: Infinity, repeatType: "reverse" }}
+                >
+                  <CategoryIcon category={issue.category} size={48} withBackground />
+                </motion.div>
+              </div>
+            )}
+            
+            <div className="absolute top-3 right-3 z-10">
+              <StatusBadge status={issue.status} size="sm" animate />
             </div>
             
-            <button
-              onClick={handleVote}
-              disabled={isVoting || !onVote}
-              className={cn(
-                "flex items-center gap-1 px-2 py-1 rounded-full transition-all duration-300",
-                onVote ? "hover:bg-civic-blue/10 dark:hover:bg-civic-blue-dark/10 cursor-pointer" : "cursor-default",
-                "bg-muted dark:bg-muted/50",
-                isVoting && "animate-pulse"
-              )}
-            >
-              <ThumbsUp size={14} className={cn(
-                "text-civic-blue dark:text-civic-blue-dark transition-transform duration-300", 
-                (isHovered && onVote) && "scale-110"
-              )} /> 
-              <span className="text-xs font-medium">{issue.votes}</span>
-              <span className="ml-1 text-xs font-semibold">Votes</span>
-            </button>
+            {issue.imageUrl && (
+              <div className="absolute bottom-3 left-3 bg-black/60 rounded-full p-1.5">
+                <Image size={16} className="text-white" />
+              </div>
+            )}
           </div>
-
-          {showActions && onEdit && onDelete && (
-            <div className={cn(
-              "flex justify-end gap-2 mt-4 pt-3 border-t border-border/50",
-              "transition-opacity duration-300",
-              isHovered ? "opacity-100" : "opacity-70"
-            )}>
-              {issue.status === "pending" && (
-                <Button variant="ghost" size="sm" className="h-8 px-2 hover:text-civic-blue dark:hover:text-civic-blue-dark hover:bg-civic-blue/10 dark:hover:bg-civic-blue-dark/10" onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onEdit();
-                }}>
-                  <Pencil className="h-4 w-4 mr-1" />
-                  Edit
-                </Button>
-              )}
-              {issue.status === "pending" && (
-                <Button variant="ghost" size="sm" className="h-8 px-2 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onDelete();
-                }}>
-                  <Trash2 className="h-4 w-4 mr-1" />
-                  Delete
-                </Button>
-              )}
+          
+          <div className="p-5">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+              <CategoryIcon category={issue.category} />
+              <span className="inline-block px-2.5 py-1 bg-muted/70 dark:bg-muted/70 text-foreground dark:text-foreground rounded-full text-xs font-medium capitalize">
+                {issue.category}
+              </span>
+              <motion.span 
+                className="text-xs text-muted-foreground ml-auto"
+                animate={isHovered ? { scale: 1.05 } : {}}
+                transition={{ duration: 0.2 }}
+              >
+                {timeAgo}
+              </motion.span>
             </div>
-          )}
+            
+            <motion.h3 
+              className={cn(
+                "font-semibold text-lg mb-2 line-clamp-2 transition-colors duration-300",
+                isHovered ? "text-primary dark:text-primary" : "text-foreground"
+              )}
+              animate={isHovered ? { y: -2 } : { y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {issue.title}
+            </motion.h3>
+            
+            <div className="flex items-center justify-between mt-3">
+              <div className="text-sm text-muted-foreground truncate max-w-[70%]">
+                <span className="inline-flex items-center">
+                  <MapPin className="w-3.5 h-3.5 mr-1.5 text-amber-500 dark:text-amber-400" />
+                  <span className="truncate">{issue.location}</span>
+                </span>
+                <span className="block text-xs text-muted-foreground mt-1.5">By: {creatorName}</span>
+              </div>
+              
+              <motion.button
+                onClick={handleVote}
+                disabled={isVoting || !onVote}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300",
+                  onVote ? "hover:bg-primary/10 dark:hover:bg-primary/10 cursor-pointer" : "cursor-default",
+                  "bg-muted/50 dark:bg-muted/30 hover:shadow-md",
+                  isVoting && "animate-pulse"
+                )}
+                whileHover={onVote ? { y: -2 } : {}}
+                whileTap={onVote ? { scale: 0.95 } : {}}
+              >
+                <ThumbsUp size={14} className={cn(
+                  "text-primary dark:text-primary transition-transform duration-300", 
+                  (isHovered && onVote) && "scale-110"
+                )} /> 
+                <span className="text-xs font-medium">{issue.votes}</span>
+                <span className="text-xs font-semibold">Votes</span>
+              </motion.button>
+            </div>
+
+            {showActions && onEdit && onDelete && (
+              <div className={cn(
+                "flex justify-end gap-2 mt-4 pt-3 border-t border-border/50",
+                "transition-all duration-300",
+                isHovered ? "opacity-100" : "opacity-70"
+              )}>
+                {issue.status === "pending" && (
+                  <Button variant="ghost" size="sm" className="h-8 px-3 hover:text-primary dark:hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/10 rounded-full" onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onEdit();
+                  }}>
+                    <motion.span whileHover={{ scale: 1.1 }}>
+                      <Pencil className="h-3.5 w-3.5 mr-1.5" />
+                    </motion.span>
+                    Edit
+                  </Button>
+                )}
+                {issue.status === "pending" && (
+                  <Button variant="ghost" size="sm" className="h-8 px-3 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full" onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onDelete();
+                  }}>
+                    <motion.span whileHover={{ scale: 1.1 }}>
+                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                    </motion.span>
+                    Delete
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </motion.div>
   );
 };
 

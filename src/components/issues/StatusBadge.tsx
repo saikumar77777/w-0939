@@ -2,6 +2,7 @@
 import React from "react";
 import { IssueStatus } from "@/types";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export interface StatusBadgeProps {
   status: IssueStatus;
@@ -26,9 +27,9 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
     };
     
     const statusClasses = {
-      "pending": "bg-civic-orange/15 text-civic-orange dark:bg-civic-orange-dark/15 dark:text-civic-orange-dark border border-civic-orange/20 dark:border-civic-orange-dark/20",
-      "in-progress": "bg-civic-purple/15 text-civic-purple dark:bg-civic-purple-dark/15 dark:text-civic-purple-dark border border-civic-purple/20 dark:border-civic-purple-dark/20",
-      "resolved": "bg-civic-green/15 text-civic-green dark:bg-civic-green-dark/15 dark:text-civic-green-dark border border-civic-green/20 dark:border-civic-green-dark/20"
+      "pending": "bg-amber-500/15 text-amber-600 dark:bg-amber-400/15 dark:text-amber-400 border border-amber-500/20 dark:border-amber-400/20",
+      "in-progress": "bg-indigo-500/15 text-indigo-600 dark:bg-indigo-400/15 dark:text-indigo-400 border border-indigo-500/20 dark:border-indigo-400/20",
+      "resolved": "bg-emerald-500/15 text-emerald-600 dark:bg-emerald-400/15 dark:text-emerald-400 border border-emerald-500/20 dark:border-emerald-400/20"
     };
 
     const animationClasses = animate ? {
@@ -72,25 +73,56 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
     
     if (status === "in-progress") {
       return (
-        <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <motion.svg 
+          className="w-3 h-3 mr-1"
+          viewBox="0 0 24 24"
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          initial={false}
+          animate={{ rotate: animate ? 360 : 0 }}
+          transition={{ duration: 2, repeat: animate ? Infinity : 0, ease: "linear" }}
+        >
           <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" 
             stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        </motion.svg>
       );
     }
     
     return (
-      <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      <motion.svg
+        className="w-3 h-3 mr-1"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
+        <motion.path
+          d="M20 6L9 17L4 12"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+        />
+      </motion.svg>
     );
   };
   
   return (
-    <span className={getStatusClasses()}>
+    <motion.span 
+      className={getStatusClasses()}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      whileHover={{ scale: 1.05 }}
+    >
       {getStatusIcon()}
       {getStatusLabel()}
-    </span>
+    </motion.span>
   );
 };
 

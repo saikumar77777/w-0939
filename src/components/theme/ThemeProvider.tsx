@@ -88,7 +88,11 @@ export function ThemeProvider({
   };
 
   if (!isMounted) {
-    return <div className="theme-loading"></div>;
+    return (
+      <div className="theme-loading flex items-center justify-center min-h-screen">
+        <div className="w-12 h-12 rounded-full border-4 border-muted border-t-primary animate-spin"></div>
+      </div>
+    );
   }
 
   return (
@@ -107,10 +111,11 @@ export function ThemeProvider({
       <AnimatePresence mode="wait">
         <motion.div
           key={theme}
-          initial={{ opacity: 0.5 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0.5 }}
-          transition={{ duration: 0.3 }}
+          initial={{ opacity: 0.5, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0.5, scale: 1.02 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="h-full"
         >
           {children}
         </motion.div>

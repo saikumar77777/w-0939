@@ -20,8 +20,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-				secondary: ['Source Sans Pro', 'sans-serif'],
+				sans: ['Poppins', 'sans-serif'],
+				heading: ['Montserrat', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -67,43 +67,43 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Community Canvas Color Palette
+				// New community color palette
 				civic: {
-					blue: '#2A6CB0', // Primary Blue
-					'blue-hover': '#1E5694', // Darker blue for hover states
-					'blue-dark': '#1A3A61', // Deep Navy for dark mode
-					green: '#34A853', // Action Green
-					'green-dark': '#5CCC8F', // Mint Green for dark mode
-					orange: '#FF9800', // Alert Orange
-					'orange-dark': '#FFB649', // Amber for dark mode
-					purple: '#7B61FF', // Progress Purple
-					'purple-dark': '#9D8DFF', // Lavender for dark mode
-					light: '#F9F9FB', // Background Light
-					dark: '#121826', // Background Dark
+					blue: '#3B82F6', // Primary Blue
+					'blue-hover': '#2563EB', // Darker blue for hover states
+					'blue-dark': '#2563EB', // Deep Blue for dark mode
+					green: '#10B981', // Action Green
+					'green-dark': '#34D399', // Light Green for dark mode
+					orange: '#F59E0B', // Alert Orange
+					'orange-dark': '#FBBF24', // Yellow for dark mode
+					purple: '#8B5CF6', // Progress Purple
+					'purple-dark': '#A78BFA', // Light Purple for dark mode
+					light: '#F9FAFB', // Background Light
+					dark: '#111827', // Background Dark
 					'card-light': '#FFFFFF', // Card Surface
-					'card-dark': '#1E293B', // Card Surface Dark
-					'text-primary': '#1E293B', // Text Primary
-					'text-secondary': '#64748B', // Text Secondary
-					'text-primary-dark': '#E2E8F0', // Text Primary Dark
-					'text-secondary-dark': '#94A3B8', // Text Secondary Dark
-					'border-light': '#E2E8F0', // Border Light
-					'border-dark': '#2D3748', // Border Dark
+					'card-dark': '#1F2937', // Card Surface Dark
+					'text-primary': '#111827', // Text Primary
+					'text-secondary': '#6B7280', // Text Secondary
+					'text-primary-dark': '#F9FAFB', // Text Primary Dark
+					'text-secondary-dark': '#D1D5DB', // Text Secondary Dark
+					'border-light': '#E5E7EB', // Border Light
+					'border-dark': '#374151', // Border Dark
 				},
 				status: {
-					pending: '#FF9800', // Orange for pending issues
-					'pending-dark': '#FFB649', // Amber for dark mode
-					"in-progress": '#7B61FF', // Purple for in-progress issues
-					'in-progress-dark': '#9D8DFF', // Lavender for dark mode
-					resolved: '#34A853', // Green for resolved issues
-					'resolved-dark': '#5CCC8F', // Mint Green for dark mode
+					pending: '#F59E0B', // Orange for pending issues
+					'pending-dark': '#FBBF24', // Yellow for dark mode
+					"in-progress": '#8B5CF6', // Purple for in-progress issues
+					'in-progress-dark': '#A78BFA', // Light Purple for dark mode
+					resolved: '#10B981', // Green for resolved issues
+					'resolved-dark': '#34D399', // Light Green for dark mode
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)',
-				xl: '0.75rem',
-				'2xl': '1rem',
+				xl: '1rem',
+				'2xl': '1.5rem',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -162,6 +162,30 @@ export default {
 					'0%': { transform: 'rotate(0deg)' },
 					'100%': { transform: 'rotate(360deg)' },
 				},
+				'reveal-right': {
+					'0%': { transform: 'translateX(-100%)', opacity: '0' },
+					'100%': { transform: 'translateX(0)', opacity: '1' },
+				},
+				'reveal-left': {
+					'0%': { transform: 'translateX(100%)', opacity: '0' },
+					'100%': { transform: 'translateX(0)', opacity: '1' },
+				},
+				'reveal-up': {
+					'0%': { transform: 'translateY(20px)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' },
+				},
+				'reveal-down': {
+					'0%': { transform: 'translateY(-20px)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' },
+				},
+				'reveal-scale': {
+					'0%': { transform: 'scale(0.9)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '1' },
+				},
+				'blur-in': {
+					'0%': { filter: 'blur(5px)', opacity: '0' },
+					'100%': { filter: 'blur(0)', opacity: '1' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -176,11 +200,18 @@ export default {
 				'float': 'float 3s ease-in-out infinite',
 				'bounce-soft': 'bounce-soft 2s ease-in-out infinite',
 				'spin-slow': 'spin-slow 8s linear infinite',
+				'reveal-right': 'reveal-right 0.5s ease-out forwards',
+				'reveal-left': 'reveal-left 0.5s ease-out forwards',
+				'reveal-up': 'reveal-up 0.5s ease-out forwards',
+				'reveal-down': 'reveal-down 0.5s ease-out forwards',
+				'reveal-scale': 'reveal-scale 0.5s ease-out forwards',
+				'blur-in': 'blur-in 0.5s ease-out forwards',
 			},
 			boxShadow: {
-				'card': '0 2px 8px rgba(0, 0, 0, 0.08)',
-				'card-hover': '0 8px 16px rgba(0, 0, 0, 0.12)',
+				'card': '0 4px 20px rgba(0, 0, 0, 0.05)',
+				'card-hover': '0 10px 30px rgba(0, 0, 0, 0.12)',
 				'dropdown': '0 10px 25px -3px rgba(0, 0, 0, 0.1)',
+				'glow': '0 0 20px rgba(59, 130, 246, 0.5)',
 			}
 		}
 	},
