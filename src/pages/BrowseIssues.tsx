@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/header/Header";
@@ -84,6 +83,7 @@ const BrowseIssues = () => {
         description: "Your vote has been counted!",
         variant: "default",
       });
+      window.location.reload();
     } catch (error) {
       console.error("Error voting:", error);
       toast({

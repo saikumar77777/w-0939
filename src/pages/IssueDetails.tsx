@@ -99,6 +99,7 @@ const IssueDetails = () => {
           title: "Vote recorded",
           description: "Thank you for your vote!",
         });
+        window.location.reload();
       }
     } catch (error: any) {
       console.error("Error voting on issue:", error);

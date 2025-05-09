@@ -1,9 +1,8 @@
-
 import { Issue, IssueCategory, IssueStatus, UserProfile } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 
 // Helper function to transform issue data from database
-const transformIssueFromDb = (data: any): Issue => {
+const transformIssueFromDb = (data: any, votes: number = 0): Issue => {
   return {
     id: data.id,
     title: data.title,
@@ -15,13 +14,13 @@ const transformIssueFromDb = (data: any): Issue => {
     updatedAt: new Date(data.updated_at),
     userId: data.user_id,
     imageUrl: data.image_url,
-    votes: data.votes,
+    votes: votes,
     latitude: data.latitude || null,
     longitude: data.longitude || null
   };
 };
 
-// Function to get all issues
+// Function to get all issues with dynamic vote count
 export const getIssues = async (): Promise<Issue[]> => {
   const { data, error } = await supabase
     .from('issues')
@@ -32,11 +31,30 @@ export const getIssues = async (): Promise<Issue[]> => {
     console.error("Error fetching issues:", error);
     throw error;
   }
-  
-  return data.map(transformIssueFromDb);
+
+  // Get vote counts for all issues
+  const ids = data.map((issue: any) => issue.id);
+  let voteCounts: Record<string, number> = {};
+  if (ids.length > 0) {
+    const { data: votesData, error: votesError } = await supabase
+      .from('issue_votes')
+      .select('issue_id');
+    if (votesError) {
+      console.error("Error fetching vote counts:", votesError);
+      throw votesError;
+    }
+    // Aggregate vote counts in JS
+    for (const row of votesData || []) {
+      if (ids.includes(row.issue_id)) {
+        voteCounts[row.issue_id] = (voteCounts[row.issue_id] || 0) + 1;
+      }
+    }
+  }
+
+  return data.map((issue: any) => transformIssueFromDb(issue, Number(voteCounts[issue.id] || 0)));
 };
 
-// Function to get a specific issue by ID
+// Function to get a specific issue by ID with dynamic vote count
 export const getIssueById = async (id: string): Promise<Issue | undefined> => {
   const { data, error } = await supabase
     .from('issues')
@@ -51,11 +69,21 @@ export const getIssueById = async (id: string): Promise<Issue | undefined> => {
     console.error("Error fetching issue:", error);
     throw error;
   }
-  
-  return transformIssueFromDb(data);
+
+  // Get vote count for this issue
+  const { count, error: votesError } = await supabase
+    .from('issue_votes')
+    .select('*', { count: 'exact', head: true })
+    .eq('issue_id', id);
+  if (votesError) {
+    console.error("Error fetching vote count:", votesError);
+    throw votesError;
+  }
+
+  return transformIssueFromDb(data, count || 0);
 };
 
-// Function to get user's issues
+// Function to get user's issues with dynamic vote count
 export const getUserIssues = async (): Promise<Issue[]> => {
   const { data: session } = await supabase.auth.getSession();
   
@@ -73,8 +101,26 @@ export const getUserIssues = async (): Promise<Issue[]> => {
     console.error("Error fetching user issues:", error);
     throw error;
   }
-  
-  return data.map(transformIssueFromDb);
+
+  // Get vote counts for all issues
+  const ids = data.map((issue: any) => issue.id);
+  let voteCounts: Record<string, number> = {};
+  if (ids.length > 0) {
+    const { data: votesData, error: votesError } = await supabase
+      .from('issue_votes')
+      .select('issue_id');
+    if (votesError) {
+      console.error("Error fetching vote counts:", votesError);
+      throw votesError;
+    }
+    for (const row of votesData || []) {
+      if (ids.includes(row.issue_id)) {
+        voteCounts[row.issue_id] = (voteCounts[row.issue_id] || 0) + 1;
+      }
+    }
+  }
+
+  return data.map((issue: any) => transformIssueFromDb(issue, Number(voteCounts[issue.id] || 0)));
 };
 
 // Function to create a new issue
@@ -452,40 +498,75 @@ export const getTemporalAnalysis = async (days: number = 7) => {
   return dates;
 };
 
+// Function to get top voted issues with dynamic vote count
 export const getTopVotedIssues = async (limit: number = 10) => {
+  // Get all issues
   const { data, error } = await supabase
     .from('issues')
-    .select('*')
-    .order('votes', { ascending: false })
-    .limit(limit);
-  
+    .select('*');
   if (error) {
     console.error("Error fetching top voted issues:", error);
     throw error;
   }
-  
-  return data.map(transformIssueFromDb);
+  // Get vote counts for all issues
+  const ids = data.map((issue: any) => issue.id);
+  let voteCounts: Record<string, number> = {};
+  if (ids.length > 0) {
+    const { data: votesData, error: votesError } = await supabase
+      .from('issue_votes')
+      .select('issue_id');
+    if (votesError) {
+      console.error("Error fetching vote counts:", votesError);
+      throw votesError;
+    }
+    for (const row of votesData || []) {
+      if (ids.includes(row.issue_id)) {
+        voteCounts[row.issue_id] = (voteCounts[row.issue_id] || 0) + 1;
+      }
+    }
+  }
+  // Sort by vote count
+  const issuesWithVotes = data.map((issue: any) => ({
+    ...transformIssueFromDb(issue, Number(voteCounts[issue.id] || 0)),
+    voteCount: Number(voteCounts[issue.id] || 0)
+  }));
+  issuesWithVotes.sort((a, b) => b.voteCount - a.voteCount);
+  return issuesWithVotes.slice(0, limit);
 };
 
+// Function to get issues for map with dynamic vote count
 export const getIssuesForMap = async () => {
-  // Get issues with real location data
   const { data, error } = await supabase
     .from('issues')
     .select('*')
     .order('created_at', { ascending: false });
-  
   if (error) {
     console.error("Error fetching map issues:", error);
     throw error;
   }
-  
-  return data.map((issue) => ({
+  const ids = data.map((issue: any) => issue.id);
+  let voteCounts: Record<string, number> = {};
+  if (ids.length > 0) {
+    const { data: votesData, error: votesError } = await supabase
+      .from('issue_votes')
+      .select('issue_id');
+    if (votesError) {
+      console.error("Error fetching vote counts:", votesError);
+      throw votesError;
+    }
+    for (const row of votesData || []) {
+      if (ids.includes(row.issue_id)) {
+        voteCounts[row.issue_id] = (voteCounts[row.issue_id] || 0) + 1;
+      }
+    }
+  }
+  return data.map((issue: any) => ({
     id: issue.id,
     title: issue.title,
     category: issue.category as IssueCategory,
     status: issue.status as IssueStatus,
-    votes: issue.votes,
-    lat: issue.latitude || (40.7128 + (Math.random() * 0.02 - 0.01)), // Use actual data or fallback to mock
-    lng: issue.longitude || (-74.006 + (Math.random() * 0.02 - 0.01))  // Use actual data or fallback to mock
+    votes: Number(voteCounts[issue.id] || 0),
+    lat: issue.latitude || (40.7128 + (Math.random() * 0.02 - 0.01)),
+    lng: issue.longitude || (-74.006 + (Math.random() * 0.02 - 0.01))
   }));
 };
