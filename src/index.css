@@ -167,7 +167,7 @@
 
   /* Confetti animation for vote button */
   .confetti {
-    @apply fixed w-2 h-2 rounded-full z-50 pointer-events-none animate-confetti;
+    @apply fixed w-2 h-2 rounded-full z-50 pointer-events-none;
     animation: confetti-fall 3s ease-in-out forwards;
   }
 

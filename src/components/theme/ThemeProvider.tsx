@@ -93,7 +93,8 @@ export function ThemeProvider({
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .theme-transition,
         .theme-transition *,
         .theme-transition *::before,
@@ -102,7 +103,7 @@ export function ThemeProvider({
           transition-duration: 500ms;
           transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         }
-      `}</style>
+      `}} />
       <AnimatePresence mode="wait">
         <motion.div
           key={theme}

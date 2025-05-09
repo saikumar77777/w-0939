@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Shield, Megaphone, Check } from "lucide-react";
+import { ArrowRight, MapPin, Shield, Megaphone, Check, ThumbsUp } from "lucide-react";
 import Header from "@/components/header/Header";
 import Footer from "@/components/Footer";
 import AuthForm from "@/components/auth/AuthForm";
