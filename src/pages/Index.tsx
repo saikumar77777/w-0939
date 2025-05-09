@@ -229,9 +229,9 @@ const Index = () => {
                     <div className="absolute bottom-0 left-0 right-0 p-6">
                       <div className="flex items-center mb-2">
                         <div className="p-1 rounded-full bg-amber-500/10 mr-2">
-                          <CategoryIcon category="infrastructure" size={16} />
+                          <CategoryIcon category="road" size={16} />
                         </div>
-                        <span className="text-xs font-medium text-amber-200">Infrastructure</span>
+                        <span className="text-xs font-medium text-amber-200">Road</span>
                       </div>
                       <h3 className="text-xl font-semibold text-white mb-1">Community Center Renovation</h3>
                       <div className="flex items-center justify-between">
